@@ -1,6 +1,6 @@
 # Aidan's Custom Shell
 ---
-Making a custom shell for my CS456 Honors Project and to eventually be used in **AcOS**[^1] (A custom OS that I hope to start making as a personal project)
+Making a custom shell for my CS456 Honors Project and to eventually be used in **AcOS** (A custom OS that I hope to start making as a personal project)
 
 ## Planning
 ---
@@ -8,7 +8,7 @@ The first question I need to ask is what I want my shell to accomplish? In what 
 
 ### Phase 1:
 - Display prompt
-    - Something like `user@device cwd >>>`
+    - Something like `user@host cwd >>>`
 - Read & parse input
     - Tokenize to commands and arguments
 - Execute external programs
