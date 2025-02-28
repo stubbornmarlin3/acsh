@@ -1,59 +1,41 @@
 #include "command.h"
 #include <stdio.h>
 #include <string.h>
-#include <stdlib.h>
 
-char *get_input() {
+int get_input(char *buf) {
     
-    // Current buffer size
-    // This is init to 1 since the fgets loop will add size COMMAND_BUF to it
-    // That way before the alloc call, this will be COMMAND_BUF+1 
-    int buf_size = 1;
+    // Current write offset in buffer
+    int wr_off = 0;
 
-    // Pointer to input buffer
-    // This is init to NULL so that a call to realloc will act like a call to malloc
-    input_buf = NULL;
+    // Input loop
+    while(1) {
+        
+        // Get characters from stdin and place in buffer at offset
+        // Only get remaining characters from stdin to fill buffer to prevent overflow
+        fgets(buf+wr_off, INPUT_BUF-wr_off, stdin);
 
-    // Temp pointer for realloc call
-    // Also used as the pointer to the newline post-loop
-    char *tmp;
-
-    // Write offset for input buffer
-    // This is used for when there is more characters than input buffer has room for
-    // This is set to negative of COMMAND_BUF so that it will be set to zero before alloc
-    int wr_off = -COMMAND_BUF; 
-
-    // Loop through input
-    do {
-        // Set buffer size
-        buf_size += COMMAND_BUF;
-        // If buffer size is bigger than the max size, then break
-        if(buf_size > COMMAND_BUF_MAX) break;
-        // Set write offset
-        wr_off += COMMAND_BUF;
-        // Allocate memory for input buffer
-        if((tmp = (char *)realloc(input_buf, buf_size)) == NULL) {
-            perror("alloc");
-            exit(1);
+        // If there is too many characters to place in buffer
+        // Clear stdin stream and return -1
+        if(strchr(buf, '\n') == NULL) {
+            char c;
+            while((c = fgetc(stdin)) != '\n');
+            return -1;
         }
-        input_buf = tmp;
-        // If allocation was okay, get input from stdin
-        // Will be placed in input buffer at the write offset
-        // Should end with a newline, otherwise subsequent
-        // calls will be needed.
-        fgets(input_buf+wr_off, COMMAND_BUF+1, stdin);
-    } 
-    while ((tmp = strchr(input_buf, '\n')) == NULL); // Check if buffer contains a newline, otherwise loop to get more input
-
-    // Change newline to null terminator
-    *tmp = '\0';
-
-    // Return pointer to input buffer
-    return input_buf;
+        // Update write offset to be where end is
+        wr_off = strlen(buf)-2;
+        // Check if either no input was given (wr_off < 0)
+        // OR if the last inputted character was NOT a '\'
+        // If so, then break out of loop
+        if(wr_off < 0 || *(buf+wr_off) != '\\') break;
+        // Otherwise print multiline prompt and loop to get more input
+        printf("> ");
+        fflush(stdout);
+    }
+    return wr_off+1;
 }
 
-void parse_input() {
-    char *token = strtok(input_buf, " ");
+void parse_input(char *input) {
+    char *token = strtok(input, " ");
     do{
         printf("%s\n", token);
     }

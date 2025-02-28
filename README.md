@@ -11,6 +11,8 @@ The first question I need to ask is what I want my shell to accomplish? In what 
     - Something like `user@host cwd >>>`
 - Read & parse input
     - Tokenize to commands and arguments
+    - Should be allowed to accept multiple lines seperated by \
+    - Arguments surrounded by "" should not be seperated by spaces
 - Execute external programs
     - Use `fork(); exec(); wait();` to execute programs
 - Implement basic built-ins

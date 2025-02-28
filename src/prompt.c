@@ -4,8 +4,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+static uid_t current_uid;              // The current user id
+static char username[USERNAME_MAX];    // Current username
+static char hostname[HOSTNAME_MAX];    // Current hostname
+static char cwd[PATH_MAX];             // Current working directory
 
-void _update_username() {
+// Updates the current_uid and username
+static void _update_username() {
     // Get the effective uid of caller
     current_uid = geteuid();
     // Take the uid to get a pointer to passwd struct from <pwd.h> that contains username
@@ -26,13 +31,13 @@ void init_prompt() {
     gethostname(hostname, sizeof(hostname));
 }
 
-void prompt() {
+void prompt(int status) {
     // If the user switches (such as from su), update
     if(current_uid != geteuid()) _update_username();
 
     // Print prompt to stdout
     // Gets the current working directory as well to print
-    printf("%s@%s:%s %% ", username, hostname, getcwd(cwd, sizeof(cwd)));
+    printf("[%d]%s@%s:%s %% ", status, username, hostname, getcwd(cwd, sizeof(cwd)));
     // Flush stdout stream
     fflush(stdout);
 }
