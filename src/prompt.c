@@ -11,7 +11,7 @@ void _update_username() {
     // Take the uid to get a pointer to passwd struct from <pwd.h> that contains username
     struct passwd *p;
     // Check to make sure pointer is not NULL
-    if ((p = getpwuid(current_uid)) == NULL) {
+    if((p = getpwuid(current_uid)) == NULL) {
         perror("getpwuid");
         exit(1);
     }
@@ -28,11 +28,11 @@ void init_prompt() {
 
 void prompt() {
     // If the user switches (such as from su), update
-    if (current_uid != geteuid()) _update_username();
+    if(current_uid != geteuid()) _update_username();
 
     // Print prompt to stdout
     // Gets the current working directory as well to print
-    printf("%s@%s %s >>> ", username, hostname, getcwd(cwd, sizeof(cwd)));
+    printf("%s@%s:%s %% ", username, hostname, getcwd(cwd, sizeof(cwd)));
     // Flush stdout stream
     fflush(stdout);
 }

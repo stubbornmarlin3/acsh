@@ -16,7 +16,11 @@ char cwd[PATH_MAX];             // Current working directory
 void _update_username(void);
 
 // Initialize the prompt with current username and hostname
+// This gets the current username and current hostname, 
+// which probably won't switch often if at all
 void init_prompt(void);
 
 // Print prompt `user@host cwd >>>`
+// Updates username if euid changes
+// No detection for hostname changes (rarely happens anyway)
 void prompt(void);  // TODO: Add support for custom prompts

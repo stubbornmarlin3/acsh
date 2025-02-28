@@ -4,7 +4,9 @@ LDFLAGS =
 
 SRC_DIR = src
 BUILD_DIR = build
+INCL_DIR = include
 
+HFILES = $(wildcard $(INCL_DIR)/*.h)
 CFILES = $(wildcard $(SRC_DIR)/*.c)
 OFILES = $(CFILES:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
 
@@ -16,7 +18,7 @@ $(BUILD_DIR):
 acsh: $(OFILES)
 	$(CC) $(LDFLAGS) $(OFILES) -o $@
 
-$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(HFILES)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
