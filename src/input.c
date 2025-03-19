@@ -1,8 +1,8 @@
-#include "command.h"
+#include "input.h"
 #include <stdio.h>
 #include <string.h>
 
-int get_input(char *buf) {
+int input(char *buf) {
     
     // Current write offset in buffer
     int wr_off = 0;
@@ -31,13 +31,7 @@ int get_input(char *buf) {
         printf("> ");
         fflush(stdout);
     }
+    *(buf+wr_off+1) = '\0';
+    // Return length of input (current offset + 1)
     return wr_off+1;
-}
-
-void parse_input(char *input) {
-    char *token = strtok(input, " ");
-    do{
-        printf("%s\n", token);
-    }
-    while ((token = strtok(NULL, " ")) != NULL);
 }
