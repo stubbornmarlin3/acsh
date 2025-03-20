@@ -18,12 +18,13 @@ int input(char *buf) {
             puts("exit");
             exit(0);
         }
-
         // If there is too many characters to place in buffer
+        // Or EOF was reached (exit shell)
         // Clear stdin stream and return -1
         if(strchr(buf, '\n') == NULL) {
+            if(fgetc(stdin) == EOF) putchar('\r');
             char c;
-            while((c = fgetc(stdin)) != '\n');
+            while((c = fgetc(stdin)) != '\n' && c != EOF);
             return -1;
         }
         // Update write offset to be where end is
