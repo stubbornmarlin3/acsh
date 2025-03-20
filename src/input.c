@@ -1,6 +1,7 @@
 #include "input.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 int input(char *buf) {
     
@@ -12,7 +13,11 @@ int input(char *buf) {
         
         // Get characters from stdin and place in buffer at offset
         // Only get remaining characters from stdin to fill buffer to prevent overflow
-        fgets(buf+wr_off, INPUT_BUF-wr_off, stdin);
+        // If fgets returns 0, Ctrl-D was pressed so exit shell
+        if(fgets(buf+wr_off, INPUT_BUF-wr_off, stdin) == 0) {
+            puts("exit");
+            exit(0);
+        }
 
         // If there is too many characters to place in buffer
         // Clear stdin stream and return -1

@@ -12,7 +12,7 @@ The first question I need to ask is what I want my shell to accomplish? In what 
 - Read & parse input
     - Tokenize to commands and arguments
     - Should be allowed to accept multiple lines seperated by \
-    - Arguments surrounded by "" should not be seperated by spaces
+    - Arguments surrounded by "" should be taken literal
 - Execute external programs
     - Use `fork(); exec(); wait();` to execute programs
 - Implement basic built-ins
@@ -26,7 +26,7 @@ The first question I need to ask is what I want my shell to accomplish? In what 
     - Handle `Ctrl+C` -> `SIGINT`
     - Implement `kill` and `wait`
 - Input & Output Direction
-    - Implement `<`, `>`, `>>`, and `|`
+    - Implement `<`, `>`, `>>`, `|` and `&`
 
 ### Phase 3:
 - Implement some more shell builtins

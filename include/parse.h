@@ -7,6 +7,6 @@
 // Parse input
 // Creates tokens from input buffer
 // Places args in parsed_args
-// Special characters: ",',$,\,|,>,>>,<,&,~
+// Special characters: ",$,\,|,>,>>,<,&,~
 // Returns number of arguments
 int parse(char *input, char **parsed_args);
