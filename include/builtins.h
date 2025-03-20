@@ -7,7 +7,7 @@ typedef struct BUILTIN{
 
 #define LEN_BUILTINS 4
 
-BUILTIN builtins[LEN_BUILTINS];
+extern BUILTIN builtins[LEN_BUILTINS];
 
 
 
