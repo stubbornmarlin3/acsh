@@ -6,10 +6,12 @@
 #include <stdio.h>
 #include <signal.h>
 
+extern int RETURN_STATUS;
+
 // Signal handler (just rewrite prompt)
 void handler(int sig) {
     printf("\b\b  \n"); // Remove ^C from terminal
-    prompt(sig);        // Reprint prompt
+    prompt();        // Reprint prompt
 }
 
 int main(int argc, char const *argv[])
@@ -19,19 +21,15 @@ int main(int argc, char const *argv[])
     init_prompt();
     char *line = (char *)malloc(INPUT_BUF*sizeof(char));
     char **args = (char **)malloc(MAX_ARGS*sizeof(char *));
-    int status = 0;
     int num_args;
     while(1) {
         // Display prompt
-        prompt(status);
+        prompt();
         // Get input and put in line
-        if(input(line) == -1) {
-            status = 1;
-            continue;
-        }
+        if(input(line) == -1) continue;
         // Parse input into arguments then execute args
         // Store return status
-        if((num_args = parse(line, args)) > 0) status = command(args);
+        if((num_args = parse(line, args)) > 0) command(args);
         // Free memory from args
         for(int i=0; i<num_args; i++) {
             free(args[i]);

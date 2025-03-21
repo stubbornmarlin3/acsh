@@ -14,15 +14,12 @@ int input(char *buf) {
         // Get characters from stdin and place in buffer at offset
         // Only get remaining characters from stdin to fill buffer to prevent overflow
         // If fgets returns 0, Ctrl-D was pressed so exit shell
-        if(fgets(buf+wr_off, INPUT_BUF-wr_off, stdin) == 0) {
-            puts("exit");
-            exit(0);
-        }
+        if(fgets(buf+wr_off, INPUT_BUF-wr_off, stdin) == 0) exit(1);
         // If there is too many characters to place in buffer
         // Or EOF was reached (exit shell)
         // Clear stdin stream and return -1
         if(strchr(buf, '\n') == NULL) {
-            if(fgetc(stdin) == EOF) putchar('\r');
+            if(fgetc(stdin) == EOF) exit(1);
             char c;
             while((c = fgetc(stdin)) != '\n' && c != EOF);
             return -1;

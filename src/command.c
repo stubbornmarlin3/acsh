@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+int RETURN_STATUS = 0;
+
 // Execute builtins from args
 static int execute_builtin(char **args) {
     for(int i=0; i<LEN_BUILTINS; i++) {
@@ -54,11 +56,7 @@ static int execute_proc(char **args) {
 }
 
 int command(char **args) {
-    int status;
-    if((status = execute_builtin(args)) == -1) {
-        return execute_proc(args);
-    }
-    else {
-        return status;
-    }
+    if((RETURN_STATUS = execute_builtin(args)) == -1) 
+        RETURN_STATUS = execute_proc(args);
+    return RETURN_STATUS;
 }

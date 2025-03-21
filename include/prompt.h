@@ -1,7 +1,5 @@
 #pragma once
 
-#include <unistd.h>
-
 #define HOSTNAME_MAX 256 // POSIX defines the max hostname is 255 character NOT including the NULL character, so add 1 for NULL byte
 #define USERNAME_MAX 256 // Longest username (POSIX says this is 9, Linux says this is 32, and MacOS says 255 so I am taking the biggest) Adding 1 to include NULL byte
 
@@ -15,4 +13,4 @@ void init_prompt(void);
 // Prints prompt
 // Updates username if euid changes
 // No detection for hostname changes (rarely happens anyway)
-void prompt(int status);  // TODO: Add support for custom prompts
+void prompt(void);  // TODO: Add support for custom prompts

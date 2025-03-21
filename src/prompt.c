@@ -8,6 +8,7 @@ static uid_t current_uid;              // The current user id
 static char username[USERNAME_MAX];    // Current username
 static char hostname[HOSTNAME_MAX];    // Current hostname
 static char cwd[PATH_MAX];             // Current working directory
+extern int RETURN_STATUS;
 
 // Updates the current_uid and username
 static void _update_username() {
@@ -31,13 +32,13 @@ void init_prompt() {
     gethostname(hostname, sizeof(hostname));
 }
 
-void prompt(int status) {
+void prompt() {
     // If the user switches (such as from su), update
     if(current_uid != geteuid()) _update_username();
 
     // Print prompt to stdout
     // Gets the current working directory as well to print
-    printf("[%d]%s@%s:%s %% ", status, username, hostname, getcwd(cwd, sizeof(cwd)));
+    printf("[%d]%s@%s:%s %% ", RETURN_STATUS, username, hostname, getcwd(cwd, sizeof(cwd)));
     // Flush stdout stream
     fflush(stdout);
 }

@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+extern int RETURN_STATUS;
 
 int parse(char *input, char **parsed_args) {
     char c;
@@ -24,7 +25,7 @@ int parse(char *input, char **parsed_args) {
                 parsed_args[j] = NULL;
                 return j; // Return count of args
             case ' ': // Seperate tokens by spaces
-                if(n == 0) continue; // Empty token
+                if(n == 0) break; // Empty token
                 parsed_args[j++][n] = '\0'; // Make space into null terminator
                 goto loop_break; // Break out of loop
             case '"': // Take things in quotes literal
@@ -41,6 +42,19 @@ int parse(char *input, char **parsed_args) {
             case '\\': // Escape next character
                 // Add next character to arg as is
                 parsed_args[j][n++] = input[i++];
+                break;
+            case '$': // Expand environment variable
+                if(input[i] == '?') {
+                    i++;
+                    n+=snprintf(parsed_args[j]+n, MAX_ARG_SIZE, "%d", RETURN_STATUS);
+                }
+                else {
+                    char *var = &input[i];
+                    while((c = input[i++]) != ' ' && c != '\0');
+                    input[i-1] = '\0';
+                    if((var = getenv(var)) == NULL) break;
+                    n+=snprintf(parsed_args[j]+n, MAX_ARG_SIZE, "%s", var);
+                }
                 break;
             default:
                 // Add current character to arg
