@@ -2,10 +2,10 @@
 
 typedef struct BUILTIN{
     char *str;
-    int (*func)(char **args, int *io_fd); // io_fd[0] is input fd, io_fd[1] is output fd
+    int (*func)(char **args);
 } BUILTIN;
 
-#define LEN_BUILTINS 8
+#define LEN_BUILTINS 6
 
 extern BUILTIN builtins[LEN_BUILTINS];
 extern char **environ;

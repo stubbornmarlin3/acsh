@@ -8,10 +8,10 @@
 
 // Changes directory to the directory in args[1]
 // If args[1] is empty, then cd to $HOME
-static int acsh_cd(char **args, int *io_fd) {
+static int acsh_cd(char **args) {
     // If args[2] contains something, then there are too many args
     if(args[2] != NULL) {
-        write(io_fd[1], "cd: too many arguments\n", 23);
+        fprintf(stderr, "cd: too many arguments\n");
         return 1;
     }
     // If args[1] is empty, cd to $HOME
@@ -27,39 +27,33 @@ static int acsh_cd(char **args, int *io_fd) {
 }
 
 // Print the current working directory
-static int acsh_pwd(char **args, int *io_fd) {
+static int acsh_pwd(char **args) {
     // If arguments are given, error because too many args
     if(args[1] != NULL) {
-        write(io_fd[1], "pwd: too many arguments\n", 24);
+        fprintf(stderr, "pwd: too many arguments\n");
         return 1;
     }
     char buf[PATH_MAX];     // buffer to store cwd
-    if(getcwd(buf, sizeof(buf)) == NULL) return 1;
-    write(io_fd[1], buf, strlen(buf)); // Print buf up until null terminator
-    write(io_fd[1], "\n", 1); // Print newline
+    printf("%s\n", getcwd(buf, sizeof(buf)));   // print to screen
     return 0;
 }
 
 // Print args to stdout
-static int acsh_echo(char **args, int *io_fd) {
+static int acsh_echo(char **args) {
     args++; // Increment to get to args[1]
     // Loop through all args and print to screen
-    while(*args != NULL) {
-        write(io_fd[1], *args, strlen(*args)); // Print argument
-        write(io_fd[1], " ", 1);    // Print space between args
-        args++; // Get next argument
-    }
+    while(*args != NULL) printf("%s ", *(args++));
     // Print newline after all args are printed
-    write(io_fd[1], "\n", 1);
+    putchar('\n');
     return 0;
 }
 
 // Exit acsh with exit code in args[1]
 // If args[1] is empty, exit with code 0
-static int acsh_exit(char **args, int *io_fd) {
+static int acsh_exit(char **args) {
     // Too many args check
     if(args[2] != NULL) {
-        write(io_fd[1], "exit: too many arguments\n", 25);
+        fprintf(stderr, "exit: too many arguments\n");
         return 1;
     }
     // If args[1] contains value, exit with that value
@@ -71,17 +65,13 @@ static int acsh_exit(char **args, int *io_fd) {
 // Set environment variables provided in args
 // Each arg should be in form name=value
 // If no args provided, print all environment variables
-static int acsh_export(char **args, int *io_fd) {
+static int acsh_export(char **args) {
     // Increment args to get to args[1] and check if empty
     // If it is empty, print all environment variables
     if(*(++args) == NULL) {
         char **var = environ;   // Get variables from external variable environ
         // Loop and print all variables from environ
-        while(*var != NULL) {
-            write(io_fd[1], *var, strlen(*var));
-            write(io_fd[1], "\n", 1);
-            var++;
-        }
+        while(*var != NULL) printf("%s\n", *(var++));
         return 0;
     }
     // If there is args, add them to environment
@@ -115,11 +105,11 @@ static int acsh_export(char **args, int *io_fd) {
     return 0;
 }
 
-static int acsh_unset(char **args, int *io_fd) {
+static int acsh_unset(char **args) {
     // Increment args to get args[1]
     // If there is no value, then unset does not have enough args
     if(*(++args) == NULL) {
-        write(io_fd[1], "unset: not enough arguments\n", 28);
+        fprintf(stderr, "unset: not enough arguments\n");
         return 1;
     }
     // Loop from args[1] deleting environment variables with matching name
@@ -133,13 +123,7 @@ static int acsh_unset(char **args, int *io_fd) {
     return 0;
 }
 
-static int acsh_kill(char **args, int *io_fd) {
-    return 0;
-}
 
-static int acsh_wait(char **args, int *io_fd) {
-    return 0;
-}
 
 BUILTIN builtins[LEN_BUILTINS] = {
     {"cd", &acsh_cd},
@@ -148,6 +132,4 @@ BUILTIN builtins[LEN_BUILTINS] = {
     {"exit", &acsh_exit},
     {"export", &acsh_export},
     {"unset", &acsh_unset},
-    {"kill", &acsh_kill},
-    {"wait", &acsh_wait},
 };
