@@ -9,16 +9,16 @@
 // Changes directory to the directory in args[1]
 // If args[1] is empty, then cd to $HOME
 static int acsh_cd(char **args) {
-    // If args[2] contains something, then there are too many args
-    if(args[2] != NULL) {
-        fprintf(stderr, "cd: too many arguments\n");
-        return 1;
-    }
     // If args[1] is empty, cd to $HOME
     if(args[1] == NULL) {
         if(chdir(getenv("HOME")) == 0) return 0;
         perror("chdir");
         exit(1);
+    }
+    // If args[2] contains something, then there are too many args
+    if(args[2] != NULL) {
+        fprintf(stderr, "cd: too many arguments\n");
+        return 1;
     }
     // Otherwise cd to args[1], checking for chdir errors
     if (chdir(args[1]) == 0) return 0;

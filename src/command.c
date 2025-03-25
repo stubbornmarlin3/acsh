@@ -11,12 +11,31 @@ int RETURN_STATUS = 0;
 
 // Execute builtins from args
 static int execute_builtin(char **args, int *io_fd) {
+
+    int prev_io_fd[2];
+    if((prev_io_fd[0] = dup(STDIN_FILENO)) == -1 || (prev_io_fd[1] = dup(STDOUT_FILENO)) == -1) {
+        perror("dup");
+        exit(1);
+    }
+    if(dup2(io_fd[0], STDIN_FILENO) == -1 || dup2(io_fd[1], STDOUT_FILENO) == -1) {
+        perror("dup2");
+        exit(1);
+    }
+    
+    int status = -1;
     for(int i=0; i<LEN_BUILTINS; i++) {
         if(strcmp(args[0], builtins[i].str) == 0) {
-            return builtins[i].func(args, io_fd);
+            status = builtins[i].func(args);
+            break;
         }
     }
-    return -1;
+    if(dup2(prev_io_fd[0], STDIN_FILENO) == -1 || dup2(prev_io_fd[1], STDOUT_FILENO) == -1) {
+        perror("dup2");
+        exit(1);
+    }
+    close(prev_io_fd[0]);
+    close(prev_io_fd[1]);
+    return status;
 }
 
 // Execute process from args
