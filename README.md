@@ -25,8 +25,10 @@ The first question I need to ask is what I want my shell to accomplish? In what 
 - ❌ Signal Handling
     - Handle `Ctrl+C` -> `SIGINT`
     - Implement `kill` and `wait`
+- ✅ Pipes
+    - Implement `|`
 - ❌ Input & Output Direction
-    - Implement `<`, `>`, `>>`, and `|`
+    - Implement `<`, `>`, `>>`
 - ❌ Background process
     - Implement `&`
 - ❌ Tilde expansion
@@ -34,7 +36,7 @@ The first question I need to ask is what I want my shell to accomplish? In what 
 
 ### Phase 3:
 - ❌ Implement some more shell builtins
-    - `alias`, `unalias`, `.`, `source`, `test`, `return`, `exec`, `eval`, `continue`, `break`
+    - `alias`, `unalias`, `.`, `source`, `test`, `return`, `exec`, `eval`, `continue`, `break`, `which`
 - ❌ Shell Scripting Support
 - ❌ Tab completion
 - ❌ History

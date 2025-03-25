@@ -38,7 +38,9 @@ void prompt() {
 
     // Print prompt to stdout
     // Gets the current working directory as well to print
-    printf("[%d]%s@%s:%s %% ", RETURN_STATUS, username, hostname, getcwd(cwd, sizeof(cwd)));
+    // Print carriage return first to make sure at beginning of line
+    if(getcwd(cwd, sizeof(cwd)) == NULL) exit(1);
+    printf("\r[%d]%s@%s:%s %% ", RETURN_STATUS, username, hostname, cwd);
     // Flush stdout stream
     fflush(stdout);
 }

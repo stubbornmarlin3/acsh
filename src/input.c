@@ -13,28 +13,42 @@ int input(char *buf) {
         
         // Get characters from stdin and place in buffer at offset
         // Only get remaining characters from stdin to fill buffer to prevent overflow
-        // If fgets returns 0, Ctrl-D was pressed so exit shell
-        if(fgets(buf+wr_off, INPUT_BUF-wr_off, stdin) == 0) exit(1);
-        // If there is too many characters to place in buffer
-        // Or EOF was reached (exit shell)
-        // Clear stdin stream and return -1
+        fgets(buf+wr_off, INPUT_BUF-wr_off, stdin);
+        // If there is no newline character in buf, we didn't get all of the input
+        // OR stdin reached the EOF
+        // Loop through remaining characters in stdin to clear
+        // If EOF character is found, exit program (Most likely Ctrl+D was pressed)
+        // Otherwise if newline is found, return -1 to specify that there was an error
         if(strchr(buf, '\n') == NULL) {
-            if(fgetc(stdin) == EOF) exit(1);
             char c;
-            while((c = fgetc(stdin)) != '\n' && c != EOF);
-            return -1;
+            while(1) {
+                c = fgetc(stdin);
+                if(c == EOF) exit(1);
+                if(c == '\n') return -1;
+            }
         }
-        // Update write offset to be where end is
+        // Update write offset to be where end of inputed characters is (exclude newline and null terminator)
         wr_off = strlen(buf)-2;
-        // Check if either no input was given (wr_off < 0)
-        // OR if the last inputted character was NOT a '\'
-        // If so, then break out of loop
-        if(wr_off < 0 || *(buf+wr_off) != '\\') break;
-        // Otherwise print multiline prompt and loop to get more input
+        // Change newline to null terminator (next character after write offset)
+        *(buf+wr_off+1) = '\0'; 
+
+        // Check last entered character in buffer is a pipe
+        if(*(buf+wr_off) == '|') {
+            // If it is, increment write offset and print pipe prompt descriptor
+            wr_off++;
+            printf("pipe");
+
+            // Breaks out and prints multiline prompt after
+        }
+        // Otherwise if last entered character in buffer is NOT a backslash,
+        // then we have normal line end and can break
+        // Else this will skip and print multiline prompt
+        else if(*(buf+wr_off) != '\\') break;
+
+        // Multiline prompt
         printf("> ");
         fflush(stdout);
     }
-    *(buf+wr_off+1) = '\0';
-    // Return length of input (current offset + 1)
+    // Return length of input (current offset)
     return wr_off+1;
 }
