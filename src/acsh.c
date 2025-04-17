@@ -1,3 +1,4 @@
+#include "acsh.h"
 #include "prompt.h"
 #include "input.h"
 #include "parse.h"
@@ -5,8 +6,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <signal.h>
+#include <string.h>
 
-extern int RETURN_STATUS;
+const char* VERSION = "1.0.0-alpha.1";
 
 // Signal handler (just rewrite prompt)
 void handler(int sig) {
@@ -16,6 +18,14 @@ void handler(int sig) {
 
 int main(int argc, char const *argv[])
 {  
+    if(argc > 0) {
+        for(int i=0; i<argc; i++) {
+            if((strcmp(argv[i], "--version") == 0)) {
+                printf("%s\n", VERSION);
+                exit(0);
+            }
+        }
+    }
     // Handle SIGINT user handler to not exit shell
     signal(SIGINT, handler);
     init_prompt();
