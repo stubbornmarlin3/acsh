@@ -37,6 +37,8 @@ The first question I need to ask is what I want my shell to accomplish? In what 
 ### Phase 3:
 - ❌ Implement some more shell builtins
     - `alias`, `unalias`, `.`, `source`, `test`, `return`, `exec`, `eval`, `continue`, `break`, `which`
+ 
+- ❌ Implement subshells ()
 - ❌ Shell Scripting Support
 - ❌ Tab completion
 - ❌ History
