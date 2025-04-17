@@ -22,7 +22,7 @@ The first question I need to ask is what I want my shell to accomplish? In what 
 - ✅ Manage environment variables
     - Implement `export` and `unset`
     - Add variable expanision `echo $PATH` -> `echo /bin:/sbin`
-- ❌ Signal Handling
+- ⚠️ Signal Handling
     - Handle `Ctrl+C` -> `SIGINT`
     - Implement `kill` and `wait`
 - ✅ Pipes
