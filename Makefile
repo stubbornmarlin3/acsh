@@ -29,4 +29,5 @@ clean:
 
 install: all
 	cp acsh $(INSTALL_DIR)
+	echo $(INSTALL_DIR)/acsh >> /etc/shells
 
