@@ -8,7 +8,7 @@
 #include <signal.h>
 #include <string.h>
 
-const char* VERSION = "1.0.0-alpha.1";
+const char* VERSION = "acsh 1.0.0-alpha.1";
 
 // Signal handler (just rewrite prompt)
 void handler(int sig) {
@@ -18,11 +18,15 @@ void handler(int sig) {
 
 int main(int argc, char const *argv[])
 {  
-    if(argc > 0) {
-        for(int i=0; i<argc; i++) {
+    if(argc > 1) {
+        for(int i=1; i<argc; i++) {
             if((strcmp(argv[i], "--version") == 0)) {
                 printf("%s\n", VERSION);
                 exit(0);
+            }
+            else{
+                fprintf(stderr, "Unknown argument: %s\n", argv[i]);
+                exit(1);
             }
         }
     }
