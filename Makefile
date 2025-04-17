@@ -2,6 +2,8 @@ CC = gcc
 CFLAGS = -Iinclude -Wall -Werror
 LDFLAGS =
 
+INSTALL_DIR = /usr/local/bin
+
 SRC_DIR = src
 BUILD_DIR = build
 INCL_DIR = include
@@ -24,3 +26,7 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(HFILES)
 clean:
 	rm -rf $(BUILD_DIR)
 	rm -f acsh
+
+install: all
+	cp acsh $(INSTALL_DIR)
+
